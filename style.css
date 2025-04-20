@@ -1,0 +1,36 @@
+/*body {
+    background-color: red;
+}*/
+/*#cv-form{
+    display:none;
+}*/
+/*#cv-template {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100vh;
+    overflow: hidden;
+}*/
+
+
+
+
+#cv-template {
+    display: none;
+}
+
+.myimg{
+    border:1px solid black;
+    border-radius: 50%;
+    width:200px;
+}
+.background{
+    background-color: cadetblue;
+}
+ul{
+    
+    margin-top: 0;
+    margin-bottom:0;
+    
+}
