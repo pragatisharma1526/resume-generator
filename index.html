@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Required Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="text-center my-5">
+            <h1>Resume Builder</h1>
+            <p class="lead">Create your professional resume in minutes</p>
+        </header>
+
+        <div class="row">
+            <!-- Form Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Personal Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="resumeForm">
+                            <!-- Profile Picture Section -->
+                            <div class="mb-4 text-center">
+                                <div class="profile-picture-container">
+                                    <img id="profilePreview" src="images/placeholder.png" alt="Profile Picture" class="profile-picture">
+                                    <div class="profile-upload-overlay">
+                                        <label for="profilePicture" class="profile-upload-label">
+                                            <i class="fas fa-camera"></i> Change Photo
+                                        </label>
+                                    </div>
+                                </div>
+                                <input type="file" id="profilePicture" accept="image/*" class="d-none">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="2" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="summary" class="form-label">Professional Summary</label>
+                                <textarea class="form-control" id="summary" rows="3" required></textarea>
+                            </div>
+                            
+                            <!-- Education Section -->
+                            <div class="mb-3">
+                                <h4>Education</h4>
+                                <div id="educationFields">
+                                    <div class="education-entry">
+                                        <div class="mb-3">
+                                            <label class="form-label">Degree</label>
+                                            <input type="text" class="form-control" name="degree[]" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Institution</label>
+                                            <input type="text" class="form-control" name="institution[]" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Year</label>
+                                            <input type="text" class="form-control" name="year[]" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" id="addEducation">Add Education</button>
+                            </div>
+
+                            <!-- Experience Section -->
+                            <div class="mb-3">
+                                <h4>Work Experience</h4>
+                                <div id="experienceFields">
+                                    <div class="experience-entry">
+                                        <div class="mb-3">
+                                            <label class="form-label">Job Title</label>
+                                            <input type="text" class="form-control" name="jobTitle[]" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Company</label>
+                                            <input type="text" class="form-control" name="company[]" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Duration</label>
+                                            <input type="text" class="form-control" name="duration[]" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" name="jobDescription[]" rows="2" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" id="addExperience">Add Experience</button>
+                            </div>
+
+                            <!-- Skills Section -->
+                            <div class="mb-3">
+                                <h4>Skills</h4>
+                                <div id="skillsFields">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="skills[]" placeholder="Enter skill" required>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" id="addSkill">Add Skill</button>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Generate Resume</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Template Selection Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Choose Template</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="templateGallery">
+                            <!-- Templates will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Resume Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="resumePreview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="downloadResume">Download PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html> 
